@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.todo_list3"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"

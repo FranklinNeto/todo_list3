@@ -24,19 +24,7 @@ class MainActivity : AppCompatActivity() {
         taskViewModel = ViewModelProvider(this).get(TaskViewModel::class.java)
 
         binding.activityMainBtnNovaTarefa.setOnClickListener{
-            NewTaskSheetFragment().show(supportFragmentManager, "newTaskTag" )
-
-            // NewTaskSheet(null).show(supportFragmentManager, "newTaskTag")
-        }
-
-        taskViewModel.name.observe(this){
-
-            binding.activityMainNomeTarefa.text = String.format("Nome da Tarefa: %s", it)
-        }
-
-        taskViewModel. description.observe(this){
-
-            binding.activityMainDescricaoTarefa.text = String.format("Descrição: %s", it)
+            NewTaskSheetFragment(null).show(supportFragmentManager, "newTaskTag" )
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
