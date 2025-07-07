@@ -1,0 +1,38 @@
+# Arquivos do Android Studio e IntelliJ
+*.iml
+.idea/
+.idea/caches
+.idea/libraries
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# Arquivos locais de configuração
+local.properties
+
+# Build system
+.gradle/
+build/
+**/build/
+.cxx/
+.externalNativeBuild/
+
+# Output de testes
+/captures/
+/test-output/
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos gerados
+*.apk
+*.ap_
+
+# Firebase e Google Services
+google-services.json
+
+# Arquivos do Kotlin
+*.kotlin_module
+
