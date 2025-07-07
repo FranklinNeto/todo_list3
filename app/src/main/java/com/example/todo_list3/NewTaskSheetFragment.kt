@@ -1,7 +1,7 @@
 package com.example.todo_list3
 
+import android.app.TimePickerDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +30,10 @@ class NewTaskSheetFragment(var taskItem:TaskItem?) : BottomSheetDialogFragment()
             val editable = Editable.Factory.getInstance()
             binding.newTaskSheetNome.text = editable.newEditable(taskItem!!.nameItem)
             binding.newTaskSheetDescricao.text = editable.newEditable(taskItem!!.descItem)
+            if(taskItem!!.dueTimeItem != null){
+                dueTime = taskItem!!.dueTimeItem!!
+                updateTimeButtonText()
+            }
         }
 
         else{
@@ -43,6 +47,29 @@ class NewTaskSheetFragment(var taskItem:TaskItem?) : BottomSheetDialogFragment()
 
             saveAction()
         }
+
+        binding.newTaskSheetBtnSelecionarTempo.setOnClickListener{
+
+            openTimePicker()
+        }
+    }
+
+    private fun openTimePicker() {
+        if(dueTime == null)
+            dueTime = LocalTime.now()
+        val listener = TimePickerDialog.OnTimeSetListener{ _, selectedHour, selectedMinute ->
+            dueTime = LocalTime.of(selectedHour, selectedMinute)
+            updateTimeButtonText()
+        }
+        val dialog = TimePickerDialog(activity, listener, dueTime!!.hour, dueTime!!.minute, true)
+        dialog.setTitle("Tarefa Vencida")
+        dialog.show()
+
+    }
+
+
+    private fun updateTimeButtonText() {
+        binding.newTaskSheetBtnSelecionarTempo.text = String.format("%02d:%02d",dueTime!!.hour,dueTime!!.minute)
     }
 
     override fun onCreateView(
@@ -59,13 +86,13 @@ class NewTaskSheetFragment(var taskItem:TaskItem?) : BottomSheetDialogFragment()
         val desc = binding.newTaskSheetDescricao.text.toString()
 
         if (taskItem == null){
-            val newTask = TaskItem(name, desc, null, null)
+            val newTask = TaskItem(name, desc, dueTime, null)
             taskViewModel.addTaskItem(newTask)
         }
 
         else{
 
-            taskViewModel.updateTaskItem(taskItem!!.idItem, name, desc, null)
+            taskViewModel.updateTaskItem(taskItem!!.idItem, name, desc, dueTime)
         }
 
         binding.newTaskSheetNome.setText("")

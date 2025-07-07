@@ -7,12 +7,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todo_list3.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), TaskItemClickListener {
 
    private lateinit var binding: ActivityMainBinding
-    private lateinit var taskViewModel: TaskViewModel
+   private lateinit var taskViewModel: TaskViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,5 +35,27 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        setRecyclerView()
+    }
+
+    private fun setRecyclerView(){
+
+       val mainActivity = this
+
+        taskViewModel.taskItems.observe(this){
+            binding.todoListRecyclerView.apply {
+
+                layoutManager = LinearLayoutManager(applicationContext)
+                adapter = TaskItemAdapter(it, mainActivity)
+            }
+        }
+    }
+
+    override fun editTaskItem(taskItem: TaskItem) {
+        NewTaskSheetFragment(taskItem).show(supportFragmentManager, "newTaskTag")
+    }
+
+    override fun completeTaskItem(taskItem: TaskItem) {
+        taskViewModel.setCompleted(taskItem)
     }
 }
