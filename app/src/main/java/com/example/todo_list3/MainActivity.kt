@@ -3,7 +3,6 @@ package com.example.todo_list3
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
