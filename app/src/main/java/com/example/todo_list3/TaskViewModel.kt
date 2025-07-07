@@ -16,33 +16,42 @@ class TaskViewModel: ViewModel() {
      taskItems.value = mutableListOf()
   }
 
-   fun addTaskItem(newTask:TaskItem){
-      val list = taskItems.value
-      list!!.add(newTask)
-      taskItems.postValue(list)
-   }
+    fun addTaskItem(newTask:TaskItem){
+        // Use 'let' para só executar o bloco se 'list' não for nulo
+        taskItems.value?.let { list -> // 'list' aqui é garantido como não nulo
+            list.add(newTask)
+            taskItems.postValue(list)
+        } ?: run {
+            // Opcional: Se por algum motivo a lista ainda for nula aqui,
+            // você pode criar uma nova ou logar um erro.
+            // Por exemplo, para garantir que nunca seja nula, você pode inicializar:
+            taskItems.value = mutableListOf(newTask)
+            taskItems.postValue(taskItems.value)
+        }
+    }
 
-   fun updateTaskItem(id: UUID, name:String, desc: String, dueTime: LocalTime?){
-      val list = taskItems.value
-      val task = list!!.find {it.idItem == id}!!
+    // Dentro de updateTaskItem:
+    fun updateTaskItem(id: UUID, name:String, desc: String, dueTime: LocalTime?){
+        taskItems.value?.let { list -> // Garante que a lista não é nula
+            val task = list.find { it.idItem == id }
+            task?.let { t -> // Garante que a tarefa foi encontrada e não é nula
+                t.nameItem = name
+                t.descItem = desc
+                t.dueTimeItem = dueTime
+                taskItems.postValue(list)
+            }
+        }
+    }
 
-      task.nameItem = name
-      task.descItem = desc
-      task.dueTimeItem = dueTime
-
-      taskItems.postValue(list)
-   }
-
-   fun setCompleted(taskItem: TaskItem){
-
-      val list = taskItems.value
-      val task = list!!.find {it.idItem == taskItem.idItem}!!
-
-      if (task.completedDateItem == null)
-         taskItem.completedDateItem = LocalDate.now()
-
-
-      taskItems.postValue(list)
-
-   }
+    // Dentro de setCompleted:
+    fun setCompleted(taskItem: TaskItem){
+        taskItems.value?.let { list -> // Garante que a lista não é nula
+            val task = list.find { it.idItem == taskItem.idItem }
+            task?.let { t -> // Garante que a tarefa foi encontrada e não é nula
+                if (t.completedDateItem == null)
+                    t.completedDateItem = LocalDate.now()
+                taskItems.postValue(list)
+            }
+        }
+    }
 }
